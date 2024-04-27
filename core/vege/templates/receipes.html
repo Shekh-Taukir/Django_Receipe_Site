@@ -1,0 +1,78 @@
+{%extends "base.html"%}
+{%block start%}
+
+<h1>Django Receipes Page</h1>
+
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"
+    integrity="sha384-kQtW33rZJAHjX0UTl8R5NWT+8HR81VK4F8DmChRT5Yub9vZk1C2w/TPf3ShZfjbE"
+    crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<hr>
+
+<div class="container mt-5">
+    <form class="col-6 mx-auto card p-3 shadow-lg" method="post" enctype="multipart/form-data">
+        {%csrf_token%}
+        <h2>Add Receipe</h2>
+        <hr>
+        <div class="mb-3">
+            <label for="staticEmail2" class="form-label">Receipe Name</label>
+            <input type="text" required class="form-control" name="name">
+        </div>
+        <div class="mb-3">
+            <label for="staticEmail2" class="form-label">Receipe Description</label>
+            <textarea name="description" required class="form-control" name="description"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="staticEmail2" class="form-label">Receipe Image</label>
+            <input type="file" class="form-control" name="image">
+        </div>
+        <button type="submit" class="btn btn-success">Add Receipe</button>
+    </form>
+
+    <hr>
+
+    <div class='mt-5'>
+        <div class="mx-auto col-6">
+            <form>
+                <div class="mb-3">
+                    <label for="staticEmail2" class="form-label">Search Receipe</label>
+                    <input type="text" class="form-control" name="search">
+                </div>
+                <button type="submit" class="btn btn-primary">Search </button>
+            </form>
+        </div>
+    </div>
+
+    <table class="table table-dark mt-5">
+        <thead>
+            <tr>
+                <th scope="col">Seq no</th>
+                <th scope="col">Receipe Name</th>
+                <th scope="col">Receipe Description</th>
+                <th scope="col">Receipe Image file</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for receipe in receipes%}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{receipe.name}}</td>
+                <td>{{receipe.description}}</td>
+                <td>
+                    <img src="/media/{{receipe.image}}" style="height:70px"></img>
+                </td>
+                <td>
+                    <a href="/delete_receipe/{{receipe.id}}" class="btn btn-danger">Delete</a>
+                    <a href="/update_receipe/{{receipe.id}}" class="btn btn-success">Update</a>
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+
+{%endblock%}

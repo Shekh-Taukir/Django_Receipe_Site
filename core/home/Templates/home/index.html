@@ -1,0 +1,60 @@
+{%extends "base.html"%}
+{%block start%}
+<h1>Django Main Page</h1>
+
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"
+    integrity="sha384-kQtW33rZJAHjX0UTl8R5NWT+8HR81VK4F8DmChRT5Yub9vZk1C2w/TPf3ShZfjbE" crossorigin="anonymous">
+    </script>
+
+
+<hr>
+<a href="/contact/">Contact</a> ||
+<a href="/about/">About</a>
+<hr>
+
+<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime, aspernatur.</h2>
+
+<!-- {{ldt_peopple}} -->
+<hr>
+<table class='container'>
+    <tr>
+        <th>Seq no</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Can Vote?</th>
+    </tr>
+
+    {%for people in ldt_peopple %}
+
+    <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{people.name}}</td>
+        <td>{{people.age}}</td>
+        <td {% if people.age < 18 %} style="background: red;" {% endif %}>
+            {% if people.age >= 18 %}
+            <i class="fa fa-thumbs-up"></i>
+            {% else %}
+            <i class="fa fa-thumbs-down"></i>
+            {% endif %}
+        </td>
+    </tr>
+    {%endfor%}
+</table>
+<p>
+    THis is the trunacated Chars:
+    <br>
+    {{wholetext|truncatechars:100 }}
+</p>
+<p>
+    this is the vegetable name that is passed:
+    <br>
+    {% if 'choli' in a_vegetables %}
+    Yes required vege is present.
+    {% elif 'tomato1' in a_vegetables %}
+    Tomatoes is presnet, so that will work.
+    {%else%}
+    Requried vege is not present.
+    {%endif %}
+</p>
+{%endblock%}
