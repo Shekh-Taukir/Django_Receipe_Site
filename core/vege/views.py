@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.db.models import Q, Sum
 
 
 # Create your views here.
@@ -120,3 +122,51 @@ def login_page(request):
 def logout_page(request):
     logout(request)
     return redirect("/login/")
+
+
+def get_student(request):
+    queryset = Student.objects.all()
+
+    # ranks = Student.objects.annotate(marks=Sum("studentmarks__marks")).order_by(
+    #     "-marks", "-student_age"
+    # )
+
+    # for rank in ranks:
+    #     print(rank.marks)
+
+    if request.GET.get("search"):
+        search = request.GET.get("search")
+        queryset = queryset.filter(
+            Q(student_name__icontains=search)
+            | Q(department__department__icontains=search)
+            | Q(student_id__student_id__icontains=search)
+            | Q(student_email__icontains=search)
+            | Q(student_age__icontains=search)
+        )
+
+    # contact_list = Contact.objects.all()
+    paginator = Paginator(queryset, 15)  # Show 25 contacts per page.
+
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+    return render(request, "reports/students.html", {"queryset": page_obj})
+
+
+# TaukirS-ER vid20 - imported the method to generate the data when view is loaded
+from .seed import generate_report_card
+
+
+def see_marks(request, student_id):
+    # TaukirS-ER vid20 - call the method to generate the data for ReportCard MOdel
+    # generate_report_card()
+    queryset = SubjectMarks.objects.filter(student__student_id__student_id=student_id)
+    total_marks = queryset.aggregate(total_marks=Sum("marks"))
+
+    return render(
+        request,
+        "reports/see_marks.html",
+        {
+            "queryset": queryset,
+            "total_marks": total_marks,
+        },
+    )

@@ -1,0 +1,43 @@
+{%extends "base.html"%}
+{%block start%}
+<h1>Student Report Card</h1>
+
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"
+    integrity="sha384-kQtW33rZJAHjX0UTl8R5NWT+8HR81VK4F8DmChRT5Yub9vZk1C2w/TPf3ShZfjbE"
+    crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<hr>
+
+<div class="container mt-5">
+
+    <h4>Rank : {{queryset.first.student.student_report_card.first.student_rank}}</h4>
+    <h4>Student Name : {{queryset.first.student.student_name}}</h4>
+    <h4>Total : {{total_marks.total_marks}}</h4>
+    <h4>Result Date : {{queryset.first.student.student_report_card.first.date_of_generation}}</h4>
+    
+    {% comment %} {% if messages %}
+    <div class="alert alert-primary" role="alert">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %} {% endcomment %}
+
+    <table class="table table-striped">
+        <tbody>
+            {% for marks in queryset %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td><b>{{marks.subject.subject_name}}</b></td>
+                <td>{{marks.marks}}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{%endblock%}
